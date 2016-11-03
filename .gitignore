@@ -1,3 +1,4 @@
 .idea/
 /data/*
 /.idea/*
+/fonction_py/__pycache__/*
