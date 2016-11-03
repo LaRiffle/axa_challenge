@@ -1,5 +1,5 @@
 import numpy as np
 
-def faireSplitting(x, y):
-    ln = (np.random.rand(x.shape[0]) < 0.8)
-    return 0, 0, 0, 0;
+def faireSplitting(x, y, taille): # return xTrain, xTest, yTrain, yTest
+    ln = (np.random.rand(x.shape[0]) < taille)
+    return x[ln], x[~ln], y[ln], y[~ln];
