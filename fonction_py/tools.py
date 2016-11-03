@@ -8,8 +8,7 @@ def poly_exp(X, degree):
     return X
 
 def MSE(yt,yp):
-    N_test = len(yt)
-    return 1./N_test*sum((yt - yp)**2)
+    print("NE PAS UTILISER MSE !! utiliser LinExp !!!")
 
 def faireSplitting(x, y, taille): # return xTrain, xTest, yTrain, yTest
     ln = (random.rand(x.shape[0]) < taille)
@@ -34,3 +33,12 @@ def check(yEmpirique, yTest):
 
     print("linEx :")
     print(linex)
+
+def LinExp(yEmpirique, yTest):
+    linex = 0
+    diff = (yTest - yEmpirique).values
+    for i in range(len(diff)):
+        linex = linex + math.exp(alpha * diff[i]) - alpha * diff[i] - 1
+
+    return linex
+
