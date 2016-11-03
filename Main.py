@@ -1,5 +1,5 @@
 import pandas as pd
-from fonction_py.preprocess import *
+#from fonction_py.preprocess import *
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -20,7 +20,7 @@ y = data[fields[-1]] # label = received calls
 ass = data[fields[-2]] # ass assignment = differentes categories a pred
 
 #Test sur Crises
-print(x.iloc(np.where(ass=='Crises')))
+print(x[ass=='Crises'])
 
 
 
