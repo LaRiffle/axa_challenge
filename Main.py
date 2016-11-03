@@ -1,6 +1,6 @@
 import pandas as pd
 from fonction_py.preprocess import *
-from fonction_py.split import *
+from fonction_py.tools import *
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -28,7 +28,8 @@ x = preprocess(x) # rajoute les features
 xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8) # rajoute les features
 #A_DEFINIR = train(xTrain, yTrain) # rajoute les features
 #yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
-#check(yEmpirique, yTest)
+yEmpirique = yTest
+check(yEmpirique, yTest)
 
 
 
