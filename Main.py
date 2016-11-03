@@ -13,22 +13,22 @@ fields = ['DATE', 'DAY_OFF', 'DAY_DS', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS
 
 
 
-data=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=10) # LECTURE
+data=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=100) # LECTURE
 
 x = data[fields[0:-2]] # Data sans les received calls
 y = data[fields[-1]] # label = received calls
 ass = data[fields[-2]] # ass assignment = differentes categories a pred
 
 #Test sur Crises
-
+print(x.iloc(np.where(ass=='Crises')))
 
 
 
 x = preprocess(x) # rajoute les features
-xTrain, xTest, yTrain, yTest = faireSplitting(x) # rajoute les features
-A_DEFINIR = train(xTrain, yTrain) # rajoute les features
-yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
-check(yEmpirique, yTest)
+#xTrain, xTest, yTrain, yTest = faireSplitting(x) # rajoute les features
+#A_DEFINIR = train(xTrain, yTrain) # rajoute les features
+#yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
+#check(yEmpirique, yTest)
 
 
 
