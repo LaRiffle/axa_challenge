@@ -1,0 +1,3 @@
+
+
+def faireSplitting(x):

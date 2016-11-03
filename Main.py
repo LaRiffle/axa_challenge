@@ -1,5 +1,10 @@
 import pandas as pd
+<<<<<<< HEAD
 #from fonction_py.preprocess import *
+=======
+from fonction_py.preprocess import *
+from fonction_py.split import *
+>>>>>>> origin/master
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -17,15 +22,20 @@ data=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows
 
 x = data[fields[0:-2]] # Data sans les received calls
 y = data[fields[-1]] # label = received calls
-ass = data[fields[-2]] # ass assignment = differentes categories a pred
+ass = data[fields[-2]] # ass assignment = differentes categories a predire
 
 #Test sur Crises
+<<<<<<< HEAD
 print(x[ass=='Crises'])
 
+=======
+x = x[ass=='Crises']
+y = y[ass=='Crises']
+>>>>>>> origin/master
 
 
 x = preprocess(x) # rajoute les features
-#xTrain, xTest, yTrain, yTest = faireSplitting(x) # rajoute les features
+xTrain, xTest, yTrain, yTest = faireSplitting(x) # rajoute les features
 #A_DEFINIR = train(xTrain, yTrain) # rajoute les features
 #yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
 #check(yEmpirique, yTest)
