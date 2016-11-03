@@ -30,7 +30,7 @@ xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8) # rajoute les features
 #yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
 yEmpirique = yTest
 #check(yEmpirique, yTest)
-
+print(x)
 #x = pd.concat([x,x['DATE']], axis=1) # test
 
 print("--- %s seconds ---" % (time.time() - start_time))

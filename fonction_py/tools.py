@@ -10,9 +10,20 @@ def poly_exp(X, degree):
 def MSE(yt,yp):
     print("NE PAS UTILISER MSE !! utiliser LinExp !!!")
 
+
+def normalize(df):
+    return (df - df.mean()) / (df.max() - df.min())
+
+
+
+
 def faireSplitting(x, y, taille): # return xTrain, xTest, yTrain, yTest
     ln = (random.rand(x.shape[0]) < taille)
     return x[ln], x[~ln], y[ln], y[~ln];
+
+
+
+
 
 
 def check(yEmpirique, yTest): # A UTILISER AVEC LES DATA FRAME DE PANDAS
