@@ -10,7 +10,7 @@ import time
 start_time = time.time()
 print("go")
 
-fields = ['DATE', 'DAY_OFF', 'DAY_DS', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
+fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
 
 
 
@@ -23,7 +23,6 @@ ass = data[fields[-2]] # ass assignment = differentes categories a predire
 #Test sur Crises
 x = x[ass=='Crises']
 y = y[ass=='Crises']
-
 
 x = preprocess(x) # rajoute les features
 xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8) # rajoute les features
