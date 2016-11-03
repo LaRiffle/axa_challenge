@@ -8,15 +8,25 @@ def poly_exp(X, degree):
     return X
 
 def MSE(yt,yp):
-    N_test = len(yt)
-    return 1./N_test*sum((yt - yp)**2)
+    print("NE PAS UTILISER MSE !! utiliser LinExp !!!")
+
+
+def normalize(df):
+    return (df - df.mean()) / (df.max() - df.min())
+
+
+
 
 def faireSplitting(x, y, taille): # return xTrain, xTest, yTrain, yTest
     ln = (random.rand(x.shape[0]) < taille)
     return x[ln], x[~ln], y[ln], y[~ln];
 
 
-def check(yEmpirique, yTest):
+
+
+
+
+def check(yEmpirique, yTest): # A UTILISER AVEC LES DATA FRAME DE PANDAS
 
     alpha=-0.1
 
@@ -34,3 +44,13 @@ def check(yEmpirique, yTest):
 
     print("linEx :")
     print(linex)
+
+def LinExp(yEmpirique, yTest): #UTILISER AVEC DES VECTEURS : POUR CONVERTIR DATA FRAME TO VECTOR DataFrame.values
+    alpha = -0.1
+    linex = 0
+    diff = (yTest - yEmpirique)
+    for i in range(len(diff)):
+        linex = linex + math.exp(alpha * diff[i]) - alpha * diff[i] - 1
+
+    return linex
+

@@ -8,7 +8,6 @@ def preprocess(x):
     del x['DATE']
     
     # Transformation en champs numériques TODO
-    
     # Normalise (mean 0, std 1) les champs our elsquels cela a un sens
     #X = x['HOUR']
     #m = mean(X,axis=0)

@@ -31,12 +31,9 @@ xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8) # rajoute les features
 W = train(xTrain, yTrain) # On créé un produit de l'apprentissage
 #yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
 yEmpirique = yTest
-check(yEmpirique, yTest)
-
-
-
-#x = pd.concat([x,x['DATE']], axis=1) # test
+#check(yEmpirique, yTest)
 print(x)
+#x = pd.concat([x,x['DATE']], axis=1) # test
 
 print("--- %s seconds ---" % (time.time() - start_time))
 
