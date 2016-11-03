@@ -24,7 +24,7 @@ ass = data[fields[-2]] # ass assignment = differentes categories a predire
 x = x[ass=='Crises']
 y = y[ass=='Crises']
 
-
+print(x)
 x = preprocess(x) # rajoute les features
 xTrain, xTest, yTrain, yTest = faireSplitting(x) # rajoute les features
 #A_DEFINIR = train(xTrain, yTrain) # rajoute les features
