@@ -10,11 +10,11 @@ import time
 start_time = time.time()
 print("go")
 
-fields = ['DATE', 'DAY_OFF', 'DAY_DS', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
+fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
 
 
 
-data=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=100) # LECTURE
+data=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=1000) # LECTURE
 
 x = data[fields[0:-2]] # Data sans les received calls
 y = data[fields[-1]] # label = received calls
@@ -26,7 +26,7 @@ y = y[ass=='Crises']
 
 
 x = preprocess(x) # rajoute les features
-xTrain, xTest, yTrain, yTest = faireSplitting(x) # rajoute les features
+#xTrain, xTest, yTrain, yTest = faireSplitting(x) # rajoute les features
 #A_DEFINIR = train(xTrain, yTrain) # rajoute les features
 #yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
 #check(yEmpirique, yTest)
@@ -34,7 +34,7 @@ xTrain, xTest, yTrain, yTest = faireSplitting(x) # rajoute les features
 
 
 #x = pd.concat([x,x['DATE']], axis=1) # test
-#print(x)
+print(x)
 
 print("--- %s seconds ---" % (time.time() - start_time))
 
