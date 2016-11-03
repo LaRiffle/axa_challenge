@@ -1,5 +1,4 @@
 import pandas as pd
-#from fonction_py.preprocess import *
 from fonction_py.preprocess import *
 from fonction_py.split import *
 import numpy as np

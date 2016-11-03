@@ -2,3 +2,4 @@
 /data/*
 /.idea/*
 /fonction_py/__pycache__/*
+/.spyderworkspace
