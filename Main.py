@@ -1,10 +1,7 @@
 import pandas as pd
-<<<<<<< HEAD
 #from fonction_py.preprocess import *
-=======
 from fonction_py.preprocess import *
 from fonction_py.split import *
->>>>>>> origin/master
 import numpy as np
 import matplotlib.pyplot as plt
 
