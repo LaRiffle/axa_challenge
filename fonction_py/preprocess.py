@@ -5,19 +5,21 @@ def preprocess(x):
     del x['DAY_WE_DS']
     del x['TPER_TEAM']
     x['HOUR'] = x['DATE'].str[-12:-10].astype(int)
+    del x['DATE']
     
-    # Transformation en champs numériques
+    # Transformation en champs numériques TODO
     
-    # Normalise (mean 0, std 1)
-    X = x['HOUR']
-    m = mean(X,axis=0)
-    s = std(X,axis=0)
-    X = (X - m) / s
-    x['HOUR'] = X
+    # Normalise (mean 0, std 1) les champs our elsquels cela a un sens
+    #X = x['HOUR']
+    #m = mean(X,axis=0)
+    #s = std(X,axis=0)
+    #X = (X - m) / s
+    #x['HOUR'] = X
     
-    # Ajoute des champs d'ordre deux pour une régression polynomiale
+    # Ajoute des champs d'ordre deux pour une régression polynomiale TODO
+    
     from fonction_py.tools import poly_exp
-    #x = poly_exp(x,2)
-    #x = column_stack([ones(len(x)), x])
+    x = poly_exp(x,2)
+    x = column_stack([ones(len(x)), x])
     
     return(x)

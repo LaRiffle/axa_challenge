@@ -1,5 +1,6 @@
 import pandas as pd
 from fonction_py.preprocess import *
+from fonction_py.train import *
 from fonction_py.tools import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,7 +27,8 @@ y = y[ass=='Crises']
 
 x = preprocess(x) # rajoute les features
 xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8) # rajoute les features
-#A_DEFINIR = train(xTrain, yTrain) # rajoute les features
+
+W = train(xTrain, yTrain) # On créé un produit de l'apprentissage
 #yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
 yEmpirique = yTest
 check(yEmpirique, yTest)
