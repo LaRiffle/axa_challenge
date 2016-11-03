@@ -1,18 +1,7 @@
 import pandas as pd
+from fonction_py.preprocess import *
 import numpy as np
-from scipy import stats
-from pandas.tools.plotting import scatter_matrix
 import matplotlib.pyplot as plt
-from sklearn import cross_validation
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.naive_bayes import GaussianNB
-from sklearn.svm import SVC
 
 import time
 
@@ -24,7 +13,11 @@ data=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows
 
 x = data[fields[0:-2]] # Data sans les received calls
 y = data[fields[-1]] # label = received calls
-ass = data[fields[-2]] # ass assignment = differentes categories a predire
+ass = data[fields[-2]] # ass assignment = differentes categories a pred
+
+
+x = preprocess(x)
+
 
 x = pd.concat([x,x['DATE']], axis=1) # test
 print(x)
