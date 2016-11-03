@@ -31,7 +31,7 @@ xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8) # rajoute les features
 yEmpirique = yTest
 check(yEmpirique, yTest)
 
-
+for i in range(10)
 
 #x = pd.concat([x,x['DATE']], axis=1) # test
 print(x)
