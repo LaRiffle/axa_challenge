@@ -1,6 +1,7 @@
 import pandas as pd
 from fonction_py.preprocess import *
 from fonction_py.tools import *
+from sklearn import linear_model
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -31,6 +32,9 @@ xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8) # rajoute les features
 yEmpirique = yTest
 #check(yEmpirique, yTest)
 print(x)
+
+
+
 #x = pd.concat([x,x['DATE']], axis=1) # test
 
 print("--- %s seconds ---" % (time.time() - start_time))
