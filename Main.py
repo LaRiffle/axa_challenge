@@ -29,10 +29,7 @@ xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8) # rajoute les features
 #A_DEFINIR = train(xTrain, yTrain) # rajoute les features
 #yEmpirique = test(A_DEFINIR, xTest) # rajoute les features
 yEmpirique = yTest
-check(yEmpirique, yTest)
-
-for i in range(10):
-    print("ok")
+#check(yEmpirique, yTest)
 
 #x = pd.concat([x,x['DATE']], axis=1) # test
 
