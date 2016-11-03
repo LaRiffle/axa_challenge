@@ -1,6 +1,10 @@
 import pandas as pd
+<<<<<<< HEAD
+#from fonction_py.preprocess import *
+=======
 from fonction_py.preprocess import *
 from fonction_py.split import *
+>>>>>>> origin/master
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -21,8 +25,13 @@ y = data[fields[-1]] # label = received calls
 ass = data[fields[-2]] # ass assignment = differentes categories a predire
 
 #Test sur Crises
+<<<<<<< HEAD
+print(x[ass=='Crises'])
+
+=======
 x = x[ass=='Crises']
 y = y[ass=='Crises']
+>>>>>>> origin/master
 
 print(x)
 x = preprocess(x) # rajoute les features
