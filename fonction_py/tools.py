@@ -24,8 +24,6 @@ def faireSplitting(x, y, taille): # return xTrain, xTest, yTrain, yTest
 
 
 
-
-
 def check(yEmpirique, yTest): # A UTILISER AVEC LES DATA FRAME DE PANDAS
 
     alpha=-0.1
