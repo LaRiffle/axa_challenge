@@ -31,7 +31,7 @@ def check(yEmpirique, yTest): # A UTILISER AVEC LES DATA FRAME DE PANDAS
     if(yTest.shape[0] != yEmpirique.shape[0]):
         print("Erreur sur la taille de la prédiction")
         return 0
-    print("accuracy :")
+    print("accuracy en % :")
     print(sum(yEmpirique==yTest)*100/yEmpirique.shape[0]) # pourcentage de bonne prediction
 
     linex = 0

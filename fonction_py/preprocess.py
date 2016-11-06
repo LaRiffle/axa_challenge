@@ -14,7 +14,7 @@ def preprocess(x):
     x['HOUR'] = x['HOUR']+ (x['DATE'].str[-9:-8].astype(int)==3)*0.5
     del x['DATE']
 
-    #x=pd.get_dummies(x)
+    x=pd.get_dummies(x)
     # Transformation en champs numériques
 
     
