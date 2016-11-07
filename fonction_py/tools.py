@@ -41,7 +41,7 @@ def check(yEmpirique, yTest): # A UTILISER AVEC LES DATA FRAME DE PANDAS
         linex = linex + math.exp(alpha * diff[i]) - alpha*diff[i]-1
 
     print("linEx :")
-    print(linex)
+    print(linex/yTest.shape[0])
 
 def LinExp(yEmpirique, yTest): #UTILISER AVEC DES VECTEURS : POUR CONVERTIR DATA FRAME TO VECTOR DataFrame.values
     alpha = -0.1
@@ -49,6 +49,15 @@ def LinExp(yEmpirique, yTest): #UTILISER AVEC DES VECTEURS : POUR CONVERTIR DATA
     diff = (yTest - yEmpirique)
     for i in range(len(diff)):
         linex = linex + math.exp(alpha * diff[i]) - alpha * diff[i] - 1
+    return linex/yTest.shape[0]
 
+def MatLinExp(yEmpirique, yTest): #UTILISER AVEC DES VECTEURS : POUR CONVERTIR DATA FRAME TO VECTOR DataFrame.values
+    alpha = -0.1
+    linex = []
+    diff = (yTest - yEmpirique)
+    for i in range(len(diff)):
+        linex.append(math.exp(alpha * diff[i]) - alpha * diff[i] - 1)
     return linex
 
+def Accuracy(yEmpirique, yTest):
+    return sum(yEmpirique==yTest)*100/yEmpirique.shape[0]

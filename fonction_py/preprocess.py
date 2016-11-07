@@ -16,21 +16,8 @@ def preprocess(x):
     del x['DATE']
     del x['WEEK_END']
     x=pd.get_dummies(x)
-    # Transformation en champs numériques
-
+    return(x)
     
-    # Transformation en champs numériques TODO
-    # Normalise (mean 0, std 1) les champs our elsquels cela a un sens
-    #X = x['HOUR']
-    #m = mean(X,axis=0)
-    #s = std(X,axis=0)
-    #X = (X - m) / s
-    #x['HOUR'] = X
-    
-    # Ajoute des champs d'ordre deux pour une régression polynomiale TODO
-    
-    from fonction_py.tools import poly_exp
-    #x = poly_exp(x,2)
-    #x = column_stack([ones(len(x)), x])
+def preprocessFINAL(x):
     
     return(x)

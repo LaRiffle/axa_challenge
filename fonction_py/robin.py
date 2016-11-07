@@ -2,6 +2,20 @@ from fonction_py.tools import *
 from sklearn import linear_model
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+from pandas.tools.plotting import scatter_matrix
+import matplotlib.pyplot as plt
+from sklearn import cross_validation
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn import decomposition
 
 # predire que Gestion renault = 0 depuis fevrier/2011
 #
@@ -15,15 +29,45 @@ def robin(x, y):
     del x
     del y    
     print("ok")
+
+    print("SANS")
+    pca = decomposition.PCA(n_components=2)#65)
+    pca.fit(xTrain)
+    PCAxTrain = pca.transform(xTrain)
     model = linear_model.LinearRegression()
-    model.fit(xTrain, yTrain)
-    model.score(xTrain, yTrain)
-    pred = model.predict(xTest)
+    model.fit(PCAxTrain, yTrain)
+    model.score(PCAxTrain, yTrain)
+    pred = model.predict(pca.transform(xTest))
     pred =np.floor(np.round(pred))
     check(pred, yTest) 
     
+    bins = np.linspace(-10, 10, 40)
+    plt.hist(pred-yTest, bins, normed=1)
     
     
+    
+#    print("PCA")
+#    pos = [1,3,5,10,20,30,40,50, 60,62, 65, 70, 75,78, 80, 90]
+#    resAcc = []
+#    resLin = []
+#    for i in pos:
+#        pca = decomposition.PCA(n_components=i)
+#        pca.fit(xTrain)
+#        PCAxTrain = pca.transform(xTrain)
+#        model = linear_model.LinearRegression()
+#        model.fit(PCAxTrain, yTrain)
+#        model.score(PCAxTrain, yTrain)
+#        pred = model.predict(pca.transform(xTest))
+#        pred =np.floor(np.round(pred))
+#        resAcc.append(Accuracy(pred, yTest.values))
+#        resLin.append(LinExp(pred, yTest.values))
+#    print(resAcc)    
+#    print(resLin)    
+#    plt.plot(pos, resLin)
+#    plt.show()
+#    plt.plot(pos, resAcc)
+#    plt.show()    
+#######################################################################   
     #best accuracy en % :
 #52.5071805097
 #linEx :
