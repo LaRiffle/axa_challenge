@@ -31,14 +31,14 @@ def robin(x, y):
     print("ok")
 
     print("SANS")
-    pca = decomposition.PCA(n_components=2)#65)
+    pca = decomposition.PCA(n_components=65)
     pca.fit(xTrain)
     PCAxTrain = pca.transform(xTrain)
     model = linear_model.LinearRegression()
     model.fit(PCAxTrain, yTrain)
     model.score(PCAxTrain, yTrain)
     pred = model.predict(pca.transform(xTest))
-    pred =np.floor(np.round(pred))
+    pred =np.floor(pred)+1
     check(pred, yTest) 
     
     bins = np.linspace(-10, 10, 40)
