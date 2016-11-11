@@ -38,11 +38,11 @@ def robin(x, y):
     model.fit(PCAxTrain, yTrain)
     model.score(PCAxTrain, yTrain)
     pred = model.predict(pca.transform(xTest))
-    pred =np.floor(pred)+1
+    pred =np.round(pred)
     check(pred, yTest) 
     
     bins = np.linspace(-10, 10, 40)
-    plt.hist(pred-yTest, bins, normed=1)
+    #plt.hist(pred-yTest, bins, normed=1)
     
     
     

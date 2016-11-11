@@ -32,7 +32,7 @@ fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS_ASSIGNMEN
 selectAss = 'Services' # quel type de ASS_ASSIGNMENT on travaille
 
 
-x=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=100000000) # LECTURE
+x=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=100) # LECTURE
 
 y = x[fields[-1]] # label = received calls
 ass = x[fields[-2]] # ass assignment = differentes categories a predire
