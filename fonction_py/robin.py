@@ -21,30 +21,35 @@ from sklearn import decomposition
 #
 #
 
-
-
+def faire(xTrain,yTrain,xTest):
+    model = linear_model.LinearRegression()
+    model.fit(xTrain, yTrain)
+    model.score(xTrain, yTrain)
+    pred = model.predict(xTest)
+    pred =np.round(pred)
+    pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
+    pred[pred<0]=0
+    return pred
 
 def robin(x, y):
     xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8)  # rajoute les features
     del x
     del y    
-    print("ok")
 
-    print("SANS")
-    pca = decomposition.PCA(n_components=65)
-    pca.fit(xTrain)
-    PCAxTrain = pca.transform(xTrain)
+    #pca = decomposition.PCA(n_components=65)
+    #pca.fit(xTrain)
+    #PCAxTrain = pca.transform(xTrain)
     model = linear_model.LinearRegression()
-    model.fit(PCAxTrain, yTrain)
-    model.score(PCAxTrain, yTrain)
-    pred = model.predict(pca.transform(xTest))
+    model.fit(xTrain, yTrain)
+    model.score(xTrain, yTrain)
+    pred = model.predict(xTest)
     pred =np.round(pred)
-    check(pred, yTest) 
-    
-    bins = np.linspace(-10, 10, 40)
+    pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
+    pred[pred<0]=0
+    #bins = np.linspace(min(pred-yTest), max(pred-yTest), max(pred-yTest)-min(pred-yTest))
     #plt.hist(pred-yTest, bins, normed=1)
-    
-    
+    #check(pred, yTest) 
+    return Accuracy(pred, yTest), LinExp(pred, yTest)
     
 #    print("PCA")
 #    pos = [1,3,5,10,20,30,40,50, 60,62, 65, 70, 75,78, 80, 90]

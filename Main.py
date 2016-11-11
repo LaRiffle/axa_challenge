@@ -28,24 +28,22 @@ import time
 start_time = time.time()
 print("go")
 
-fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
-selectAss = 'Services' # quel type de ASS_ASSIGNMENT on travaille
+fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
+selectAss = 'Gestion Renault' # quel type de ASS_ASSIGNMENT on travaille
+c = pd.DataFrame()
+listass= ['CAT', 'CMS', 'Crises', 'Domicile', 'Evenements', 'Gestion', 'Gestion - Accueil Telephonique', 'Gestion Amex', 'Gestion Assurances', 'Gestion Clients', 'Gestion DZ', 'Gestion Relation Clienteles', 'Gestion Renault', 'Japon', 'Manager', 'Mécanicien', 'Médical', 'Nuit', 'Prestataires', 'RENAULT', 'RTC', 'Regulation Medicale', 'SAP', 'Services', 'Tech. Axa', 'Tech. Inter', 'Tech. Total', 'Téléphonie']
+tot = pd.DataFrame()
+for selectAss in listass:
+    x=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
+    print("preprocessing...")
+    x,y = preprocess(x,selectAss) # rajoute les features
+    tot=pd.concat([tot,faire(x,y,preprocessFINAL(x,selectAss))])
+    ######################################################################TEST DE ROBIN
+   
+c=robin(x, y)
 
 
-x=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=100) # LECTURE
-
-y = x[fields[-1]] # label = received calls
-ass = x[fields[-2]] # ass assignment = differentes categories a predire
-x = x[fields[0:-2]] # Data sans les received calls
-
-x = x[ass==selectAss]
-y = y[ass==selectAss]
-
-print("preprocessing...")
-x = preprocess(x) # rajoute les features
-
-######################################################################TEST DE ROBIN
-robin(x, y)
+xTrain,yTrain = preprocess(x,'CAT')
 print("--- %s seconds ---" % (time.time() - start_time))
 x.columns.values
 

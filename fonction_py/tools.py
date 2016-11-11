@@ -45,7 +45,7 @@ def check(yEmpirique, yTest): # A UTILISER AVEC LES DATA FRAME DE PANDAS
 def LinExp(yEmpirique, yTest):#Retourne l'erreur moyenne #UTILISER AVEC DES VECTEURS : POUR CONVERTIR DATA FRAME TO VECTOR DataFrame.values
     alpha = -0.1
     linex = 0
-    diff = (yTest - yEmpirique)
+    diff = (yTest - yEmpirique).values
     for i in range(len(diff)):
         linex = linex + math.exp(alpha * diff[i]) - alpha * diff[i] - 1
     return linex/yTest.shape[0]
