@@ -1,4 +1,5 @@
 from fonction_py.tools import *
+from scipy.optimize import minimize
 from sklearn import linear_model
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -21,26 +22,33 @@ from sklearn import decomposition
 #
 #
 
+def fun_to_min(x,xTrain,yTrain):
+    a=x[:-1]
+    b=x[-1]
+    return LinExp(np.dot(xTrain,np.transpose(a))+b,yTrain)
 
 
-
-def robin(x, y):
+def linearLinexpMinimization(x, y):
     xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8)  # rajoute les features
     del x
     del y    
     print("ok")
 
-    print("SANS")
+    print("AVEC")
     pca = decomposition.PCA(n_components=65)#65)
     pca.fit(xTrain)
     PCAxTrain = pca.transform(xTrain)
-    model = linear_model.LinearRegression()
-    model.fit(PCAxTrain, yTrain)
-    model.score(PCAxTrain, yTrain)
-    pred = model.predict(pca.transform(xTest))
-    pred =np.floor(np.round(pred))
-    check(pred, yTest) 
-    
+    nbLines,nbFeatures = PCAxTrain.shape
+    res = minimize(fun_to_min,np.zeros(nbFeatures+1),args=(PCAxTrain,yTrain.values))
+    PCAxTest = pca.transform(xTest)
+    x = res.x
+    a=x[:-1]
+    b=x[-1]
+    print("a : \n",a)
+    print("b : \n",b)
+    pred = np.dot(PCAxTest,np.transpose(a))+b
+    pred = np.round(pred)
+    check(pred, yTest)
     bins = np.linspace(-10, 10, 40)
     plt.hist(pred-yTest, bins, normed=1)
     

@@ -3,6 +3,7 @@ from fonction_py.preprocess import *
 from fonction_py.train import *
 from fonction_py.tools import *
 from fonction_py.robin import *
+from fonction_py.tim import *
 from sklearn import linear_model
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,7 +33,7 @@ fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS_ASSIGNMEN
 selectAss = 'Services' # quel type de ASS_ASSIGNMENT on travaille
 
 
-x=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=10000) # LECTURE
+x=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=1000000) # LECTURE
 
 y = x[fields[-1]] # label = received calls
 ass = x[fields[-2]] # ass assignment = differentes categories a predire
@@ -45,7 +46,7 @@ print("preprocessing...")
 x = preprocess(x) # rajoute les features
 
 ######################################################################TEST DE ROBIN
-robin(x, y)
+linearLinexpMinimization(x, y)
 print("--- %s seconds ---" % (time.time() - start_time))
 x.columns.values
 

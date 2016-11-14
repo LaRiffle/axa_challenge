@@ -1,5 +1,6 @@
 from numpy import *
 import math
+import pandas
 
 def poly_exp(X, degree):
     N,D = X.shape
