@@ -29,31 +29,7 @@ import time
 start_time = time.time()
 print("go")
 
-<<<<<<< HEAD
-fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS','TPER_TEAM', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
-selectAss = 'Services' # quel type de ASS_ASSIGNMENT on travaille
 
-
-x=pd.read_csv("data/train_2011_2012_2013.csv", sep=";", usecols=fields, nrows=1000000) # LECTURE
-
-y = x[fields[-1]] # label = received calls
-ass = x[fields[-2]] # ass assignment = differentes categories a predire
-x = x[fields[0:-2]] # Data sans les received calls
-
-x = x[ass==selectAss]
-y = y[ass==selectAss]
-
-print("preprocessing...")
-x = preprocess(x) # rajoute les features
-
-######################################################################TEST DE ROBIN
-linearLinexpMinimization(x, y)
-print("--- %s seconds ---" % (time.time() - start_time))
-x.columns.values
-
-
-
-=======
 fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
 selectAss = 'Téléphonie' # quel type de ASS_ASSIGNMENT on travaille
 c = pd.DataFrame()
@@ -71,7 +47,8 @@ for selectAss in listass:
     
     x=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
     x,y = preprocess(x,selectAss) # rajoute les features
-    res.append(robin(x,y))
+    #res.append(robin(x,y))
+    res.append(tim(x,y))
     
     
 print("--- %s seconds ---" % str((time.time() - start_time)))
@@ -91,7 +68,6 @@ res.to_csv("restestTel.csv", sep=";", decimal=",")
 
 #del resultat['fait']
 #resultat.to_csv("vraipred.txt", sep="\t", index =False)
->>>>>>> origin/master
 ###########################################################
 
 print("--- %s seconds ---" % (time.time() - start_time))

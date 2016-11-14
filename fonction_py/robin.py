@@ -36,25 +36,12 @@ def opt(x,y):
     m[m<4]=4
     m[m>xTrain.shape[1]]= xTrain.shape[1]
 
-<<<<<<< HEAD
-    print("SANS")
-    pca = decomposition.PCA(n_components=65)#65)
-    pca.fit(xTrain)
-    PCAxTrain = pca.transform(xTrain)
-    model = linear_model.LinearRegression()
-    model.fit(PCAxTrain, yTrain)
-    model.score(PCAxTrain, yTrain)
-    pred = model.predict(pca.transform(xTest))
-    pred =np.floor(np.round(pred))
-    check(pred, yTest) 
-=======
     param_dist = {"max_depth": [100,90, 60, 50, 10, None],
               "max_features":list(m) ,
              # "min_samples_split": sp_randint(1, 11),
              # "min_samples_leaf": sp_randint(1, 11),
               "bootstrap": [True, False]
               }
->>>>>>> origin/master
     
     rsearch = RandomizedSearchCV(estimator=clf, param_distributions=param_dist, n_iter=20)
     rsearch.fit(xTrain, yTrain)
