@@ -1,55 +1,93 @@
 from fonction_py.tools import *
 from sklearn import linear_model
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from pandas.tools.plotting import scatter_matrix
 import matplotlib.pyplot as plt
 from sklearn import cross_validation
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.naive_bayes import GaussianNB
-from sklearn.svm import SVC
+from sklearn import tree
+from sklearn import svm
 from sklearn import decomposition
+from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.grid_search import GridSearchCV
+from sklearn.grid_search import RandomizedSearchCV
+from scipy.stats import uniform as sp_randint
+from sklearn import datasets
+from sklearn.linear_model import Ridge
 
-# predire que Gestion renault = 0 depuis fevrier/2011
-#
-#
 
 def faire(xTrain,yTrain,xTest):
     model = linear_model.LinearRegression()
     model.fit(xTrain, yTrain)
     model.score(xTrain, yTrain)
     pred = model.predict(xTest)
-    pred =np.round(pred)
     pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
     pred[pred<0]=0
-    return pred
+    return np.round(pred).astype(int)
 
+    
+def opt(x,y):
+    xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8)  # rajoute les features
+    
+    clf = RandomForestRegressor(n_estimators=20)
+    m = np.random.normal(xTrain.shape[1]/2, 5, 20).astype(int)
+    m[m<4]=4
+    m[m>xTrain.shape[1]]= xTrain.shape[1]
+
+    param_dist = {"max_depth": [100,90, 60, 50, 10, None],
+              "max_features":list(m) ,
+             # "min_samples_split": sp_randint(1, 11),
+             # "min_samples_leaf": sp_randint(1, 11),
+              "bootstrap": [True, False]
+              }
+    
+    rsearch = RandomizedSearchCV(estimator=clf, param_distributions=param_dist, n_iter=20)
+    rsearch.fit(xTrain, yTrain)
+    # summarize the results of the random parameter search
+    print(rsearch.best_estimator_)
+    model =rsearch.best_estimator_
+    model.fit(xTrain, yTrain)  
+    pred = model.predict(xTest)
+    pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
+    pred[pred<0]=0
+    pred =np.round(pred)
+    return [rsearch.best_estimator_, LinExp(pred, yTest)]
+
+     
+    
 def robin(x, y):
     xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8)  # rajoute les features
-    del x
-    del y    
-
-    #pca = decomposition.PCA(n_components=65)
-    #pca.fit(xTrain)
-    #PCAxTrain = pca.transform(xTrain)
-    model = linear_model.LinearRegression()
-    model.fit(xTrain, yTrain)
-    model.score(xTrain, yTrain)
-    pred = model.predict(xTest)
-    pred =np.round(pred)
-    pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
-    pred[pred<0]=0
-    #bins = np.linspace(min(pred-yTest), max(pred-yTest), max(pred-yTest)-min(pred-yTest))
-    #plt.hist(pred-yTest, bins, normed=1)
-    #check(pred, yTest) 
-    return Accuracy(pred, yTest), LinExp(pred, yTest)
+    #del x
+    #del y    
+    listModel = []
+    nest = [10,20,30]
+    mfea = [30,70,100]
+    mdep = [3,5,8,10]
+    for i in nest:
+        for j in mfea:
+            for k in mdep:
+                listModel.append(RandomForestRegressor(n_estimators=i, bootstrap=False, max_depth=k, max_features=j))
+    # GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=10, random_state=0),  svm.SVC()
+    res =[]
+    start_time = time.time()
+    i=0
+    for model in listModel:
+        i=i+1
+        #start_time = time.time()
+        print(i)
+        model.fit(xTrain, yTrain)
+        #model.score(xTrain, yTrain)
+        pred = model.predict(xTest)
+        pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
+        pred[pred<0]=0
+        pred =np.round(pred)
+        res.append(LinExp(pred, yTest))
+    print("--- %s seconds ---" % str((time.time() - start_time)))   
+    return res
+   
+    
     
 #    print("PCA")
 #    pos = [1,3,5,10,20,30,40,50, 60,62, 65, 70, 75,78, 80, 90]

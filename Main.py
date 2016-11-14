@@ -29,26 +29,42 @@ start_time = time.time()
 print("go")
 
 fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
-selectAss = 'Gestion Renault' # quel type de ASS_ASSIGNMENT on travaille
+selectAss = 'Téléphonie' # quel type de ASS_ASSIGNMENT on travaille
 c = pd.DataFrame()
-listass= ['CAT', 'CMS', 'Crises', 'Domicile', 'Evenements', 'Gestion', 'Gestion - Accueil Telephonique', 'Gestion Amex', 'Gestion Assurances', 'Gestion Clients', 'Gestion DZ', 'Gestion Relation Clienteles', 'Gestion Renault', 'Japon', 'Manager', 'Mécanicien', 'Médical', 'Nuit', 'Prestataires', 'RENAULT', 'RTC', 'Regulation Medicale', 'SAP', 'Services', 'Tech. Axa', 'Tech. Inter', 'Tech. Total', 'Téléphonie']
-tot = pd.DataFrame()
+listass= ['CAT', 'CMS', 'Crises', 'Domicile', 'Gestion', 'Gestion - Accueil Telephonique','Gestion Assurances', 'Gestion Clients', 'Gestion DZ', 'Gestion Relation Clienteles', 'Gestion Renault', 'Japon', 'Manager', 'Mécanicien', 'Médical', 'Nuit', 'Prestataires', 'RENAULT', 'RTC', 'Regulation Medicale', 'SAP', 'Services', 'Tech. Axa', 'Tech. Inter', 'Tech. Total', 'Téléphonie']
+#'Evenements',  'Gestion Amex'
+#setFields = set(pd.read_csv("data/fields.txt", sep=";")['0'].values)
+resultat = pd.read_csv("data/submission.txt", sep="\t")
+resultat['fait'] = False
+i=0
+res = []
+start_time = time.time()
 for selectAss in listass:
+    i = i+1
+    print(selectAss+' ' +str(np.round(i*100/len(listass))))
+    
     x=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
-    print("preprocessing...")
     x,y = preprocess(x,selectAss) # rajoute les features
-    tot=pd.concat([tot,faire(x,y,preprocessFINAL(x,selectAss))])
-    ######################################################################TEST DE ROBIN
-   
-c=robin(x, y)
+    res.append(robin(x,y))
+    
+    
+print("--- %s seconds ---" % str((time.time() - start_time)))
+res = pd.DataFrame(res, index=listass)
+#res.columns = listModel
+res.to_csv("restestTel.csv", sep=";", decimal=",")
+####################################################### ecriture final
+#    xTest, souvenir = preprocessFINAL(x,selectAss)
+#    souvenir['prediction']= faire(x,y,xTest)
+#    ######################################################################TEST DE ROBIN
+#    resultat=pd.merge(resultat, souvenir, how='left',on=['DATE', 'ASS_ASSIGNMENT'])
+#    resultat['fait'] = ~pd.isnull(resultat['prediction_y']) | resultat['fait']
+#    resultat=resultat.fillna(0)
+#    resultat['prediction'] = resultat['prediction_x']+resultat['prediction_y']
+#    del resultat['prediction_x']
+#    del resultat['prediction_y']
 
-
-xTrain,yTrain = preprocess(x,'CAT')
-print("--- %s seconds ---" % (time.time() - start_time))
-x.columns.values
-
-
-
+#del resultat['fait']
+#resultat.to_csv("vraipred.txt", sep="\t", index =False)
 ###########################################################
 
 print("--- %s seconds ---" % (time.time() - start_time))

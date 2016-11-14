@@ -20,7 +20,7 @@ def preprocess(x, selectAss):
    # x['HOUR'] = x['HOUR']+ ':'+((x['DATE'].str[-9:-8].astype(int)==3)*0.5).astype(str)
     x['HOUR'] = x['DATE'].str[-12:-8]
     x['DATE'] = x['DAY']+'/'+x['MONTH']+'/'+x['YEAR']
-    
+   
     file = ['joursFeries', 'vacances']
     for f in file:
         jf =pd.read_csv("data/"+f+".csv", sep=";")
@@ -32,11 +32,12 @@ def preprocess(x, selectAss):
     del x['CSPL_RECEIVED_CALLS']
     del x['DATE']
     x=pd.get_dummies(x)
-    return(x, y)
+    return(x.fillna(0), y)
     
 def preprocessFINAL(x, selectAss):
     xTest=pd.read_csv("data/submission.txt", sep="\t") # LECTURE
     del xTest['prediction']
+    souvenir = xTest.copy()
     xTest['YEAR'] = xTest['DATE'].str[0:4]
     xTest['MONTH'] = xTest['DATE'].str[5:7]
     xTest['DAY'] = xTest['DATE'].str[8:10]
@@ -48,21 +49,25 @@ def preprocessFINAL(x, selectAss):
         jf =pd.read_csv("data/"+f+".csv", sep=";")
         for n in list(jf):
             xTest[n]= xTest['DATE'].isin(jf[n])
+            
     if(selectAss != False):
         xTest = xTest[xTest['ASS_ASSIGNMENT'] == selectAss]
+        souvenir = souvenir[souvenir['ASS_ASSIGNMENT'] == selectAss]
+
     xTest['tmp']=pd.to_datetime(xTest['DATE']).dt.dayofweek
     jour = pd.DataFrame(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'])
     jour.columns = ['DAY_WE_DS']
-    jour['tmp']=[1,2,3,4,5,6,7]
-    xTest=pd.merge(jour,xTest)
+    jour['tmp']=[0,1,2,3,4,5,6]
+    xTest=pd.merge(xTest, jour)
     xTest['WEEK_END'] = xTest['DAY_WE_DS'].isin(['Samedi', 'Dimanche'])
     del xTest['DATE']
+    del xTest['tmp']
     xTest=pd.get_dummies(xTest)
     s=set(list(x))
     ss=set(list(xTest))        
     for tmp in s.difference(ss):
         xTest[tmp]=0
-    return(xTest)
+    return(xTest.fillna(0), souvenir)
     
     
 def print_sub(xTest, yTest):
