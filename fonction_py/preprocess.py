@@ -69,6 +69,27 @@ def preprocessFINAL(x, selectAss):
         xTest[tmp]=0
     return(xTest.fillna(0), souvenir)
     
-    
-def print_sub(xTest, yTest):
-    xTest
+def preprocessTel(x):
+        # Ajoute les champs utiles et supprime ceux qui servent à rien
+    #del x['DAY_WE_DS']
+    #del x['TPER_TEAM']
+    x['YEAR'] = x['DATE'].str[0:4]
+    x['MONTH'] = x['DATE'].str[5:7]
+    x['DAY'] = x['DATE'].str[8:10]
+    #x['HOUR'] = x['DATE'].str[-12:-10].astype(int)
+   # x['HOUR'] = x['HOUR']+ ':'+((x['DATE'].str[-9:-8].astype(int)==3)*0.5).astype(str)
+    x['HOUR'] = x['DATE'].str[-12:-8]
+    x['DATE'] = x['DAY']+'/'+x['MONTH']+'/'+x['YEAR']
+    x['VARBIN'] = x['DATE']>='05/06/2013'
+    file = ['joursFeries', 'vacances']
+    for f in file:
+        jf =pd.read_csv("data/"+f+".csv", sep=";")
+        for n in list(jf):
+            x[n]= x['DATE'].isin(jf[n])
+    if(selectAss != False):
+        x = x[x['ASS_ASSIGNMENT'] == selectAss]
+    y = x['CSPL_RECEIVED_CALLS']
+    del x['CSPL_RECEIVED_CALLS']
+    del x['DATE']
+    x=pd.get_dummies(x)
+    return(x.fillna(0), y)

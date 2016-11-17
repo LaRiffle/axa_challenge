@@ -44,8 +44,9 @@ for selectAss in listass:
     print(selectAss+' ' +str(np.round(i*100/len(listass))))
     
     x=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
-    x,y = preprocess(x,selectAss) # rajoute les features
-    res.append(robin(x,y))
+    #x,y = preprocess(x,selectAss) # rajoute les features
+    x,y = preprocessTel(x)
+    res.append(robinTel(x,y))
     
     
 print("--- %s seconds ---" % str((time.time() - start_time)))
