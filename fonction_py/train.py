@@ -42,21 +42,17 @@ def faireTout():
         xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8)
         model[1].fit(xTrain, yTrain)
         #model.score(xTrain, yTrain)
-        #(xTest, souvenir)=preprocessFINAL(x,model[0])
+        (xTest, souvenir)=preprocessFINAL(x,model[0])
         pred = model[1].predict(xTest)
         pred[pred>max(y)*1.05]=max(y)*1.05
         pred[pred<0]=0
         pred =np.round(pred)
-        l=LinExp(pred, yTest)
-        print(l)
-        print(l*len(pred))
-        res.append([l, len(pred)])
-#        souvenir['prediction']=pred
-#        resultat=pd.merge(resultat, souvenir, how='left',on=['DATE', 'ASS_ASSIGNMENT'])
-#        resultat=resultat.fillna(0)
-#        resultat['prediction'] = resultat['prediction_x']+resultat['prediction_y']
-#        del resultat['prediction_x']
-#        del resultat['prediction_y']
+        souvenir['prediction']=pred
+        resultat=pd.merge(resultat, souvenir, how='left',on=['DATE', 'ASS_ASSIGNMENT'])
+        resultat=resultat.fillna(0)
+        resultat['prediction'] = resultat['prediction_x']+resultat['prediction_y']
+        del resultat['prediction_x']
+        del resultat['prediction_y']
     pd.DataFrame(res).to_csv("reslist.csv", sep=";", decimal=",")
     resultat.to_csv("vraipred.txt", sep="\t", index =False)    
     return resultat
