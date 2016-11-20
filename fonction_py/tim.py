@@ -54,7 +54,7 @@ def linearLinexpMinimization(x, y):
     bins = np.linspace(-10, 10, 40)
     plt.hist(pred-yTest, bins, normed=1)
 
-def telephoniePred(x,y,yTest):
+def telephoniePred(x,y,xTest):
     pca = decomposition.PCA(n_components=65)#65)
     pca.fit(x)
     PCAxTrain = pca.transform(x)
