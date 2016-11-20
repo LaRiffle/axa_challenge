@@ -16,7 +16,6 @@ from sklearn.grid_search import RandomizedSearchCV
 from scipy.stats import uniform as sp_randint
 from sklearn import datasets
 from sklearn.linear_model import Ridge
-from fonction_py.tim import *
 
 import time
 
@@ -31,41 +30,28 @@ def faireTout():
     i=0
     res = []
     start_time = time.time()
-    model = listmodel[1]
+    model = listmodel[25]
     data=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
     
     resultat = pd.read_csv("data/submission.txt", sep="\t") # LECTURE
     res=[]
     for model in listmodel:
         i = i+1
-        print(model[0])
+        print(model[0])#nom du assignment
         x,y = preprocess(data.copy(), model[0]) # rajoute les features
-        model[1].fit(x, y)
-        #model.score(xTrain, yTrain)
+        model[1].fit(x, y) #entrainement
+       
         (xTest, souvenir)=preprocessFINAL(x,model[0])
         pred = model[1].predict(xTest)
         pred[pred>max(y)*1.05]=max(y)*1.05
         pred[pred<0]=0
-        pred =np.round(pred).astype(int)
+        pred =np.round(pred)
         souvenir['prediction']=pred
         resultat=pd.merge(resultat, souvenir, how='left',on=['DATE', 'ASS_ASSIGNMENT'])
         resultat=resultat.fillna(0)
         resultat['prediction'] = resultat['prediction_x']+resultat['prediction_y']
         del resultat['prediction_x']
         del resultat['prediction_y']
-    x,y = preprocess(data.copy(), 'Téléphonie') # rajoute les features
-    #model.score(xTrain, yTrain)
-    (xTest, souvenir)=preprocessFINAL(x,model[0])
-    pred=telephoniePred(x,y,xTest)
-    pred[pred>max(y)*1.05]=max(y)*1.05
-    pred[pred<0]=0
-    pred =np.round(pred).astype(int)
-    souvenir['prediction']=pred
-    resultat=pd.merge(resultat, souvenir, how='left',on=['DATE', 'ASS_ASSIGNMENT'])
-    resultat=resultat.fillna(0)
-    resultat['prediction'] = resultat['prediction_x']+resultat['prediction_y']
-    del resultat['prediction_x']
-    del resultat['prediction_y']
     pd.DataFrame(res).to_csv("reslist.csv", sep=";", decimal=",")
     resultat.to_csv("vraipred.txt", sep="\t", index =False)    
     return resultat
@@ -184,4 +170,5 @@ def faireListModel():
            max_features='auto', max_leaf_nodes=None, min_samples_leaf=1,
            min_samples_split=2, min_weight_fraction_leaf=0.0,
            n_estimators=100, n_jobs=1, oob_score=False, random_state=None,
-           verbose=0, warm_start=False))]
+           verbose=0, warm_start=False)),
+    ('Téléphonie',RandomForestRegressor(n_estimators=40, bootstrap=False, max_depth=1, max_features=12))]
