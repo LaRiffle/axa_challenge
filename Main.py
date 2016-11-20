@@ -3,6 +3,7 @@ from fonction_py.preprocess import *
 from fonction_py.train import *
 from fonction_py.tools import *
 from fonction_py.robin import *
+from fonction_py.tim import *
 from sklearn import linear_model
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,6 +29,7 @@ import time
 start_time = time.time()
 print("go")
 
+
 fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
 selectAss = 'Téléphonie' # quel type de ASS_ASSIGNMENT on travaille
 c = pd.DataFrame()
@@ -44,9 +46,15 @@ for selectAss in listass:
     print(selectAss+' ' +str(np.round(i*100/len(listass))))
     
     x=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
+<<<<<<< HEAD
     #x,y = preprocess(x,selectAss) # rajoute les features
     x,y = preprocessTel(x)
     res.append(robinTel(x,y))
+=======
+    x,y = preprocess(x,selectAss) # rajoute les features
+    #res.append(robin(x,y))
+    res.append(tim(x,y))
+>>>>>>> origin/master
     
     
 print("--- %s seconds ---" % str((time.time() - start_time)))
