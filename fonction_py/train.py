@@ -31,7 +31,7 @@ def faireTout():
     i=0
     res = []
     start_time = time.time()
-    model = listmodel[1]
+    model = listmodel[3]
     data=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
     
     resultat = pd.read_csv("data/submission.txt", sep="\t") # LECTURE
@@ -40,9 +40,9 @@ def faireTout():
         i = i+1
         print(model[0])
         x,y = preprocess(data.copy(), model[0]) # rajoute les features
-        model[1].fit(x, y)
         #model.score(xTrain, yTrain)
-        (xTest, souvenir)=preprocessFINAL(x,model[0])
+        (xTest, x, souvenir)=preprocessFINAL(x,model[0])
+        model[1].fit(x, y)
         pred = model[1].predict(xTest)
         pred[pred>max(y)*1.05]=max(y)*1.05
         pred[pred<0]=0
@@ -67,12 +67,13 @@ def faireTout():
     del resultat['prediction_x']
     del resultat['prediction_y']
     pd.DataFrame(res).to_csv("reslist.csv", sep=";", decimal=",")
-    resultat.to_csv("vraipred.txt", sep="\t", index =False)    
+    resultat.to_csv("vraipred.txt", sep="\t", index =False)  
+    
     return resultat
     
     
 def faireListModel():
-    return [('CAT',  linear_model.LinearRegression()), 
+    return [('CAT',  linear_model.LinearRegression(n_jobs=-1)), 
     ('CMS', RandomForestRegressor(bootstrap=False, criterion='mse', max_depth=5,
            max_features=30, max_leaf_nodes=None, min_samples_leaf=1,
            min_samples_split=2, min_weight_fraction_leaf=0.0,
