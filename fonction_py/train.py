@@ -67,8 +67,14 @@ def faireTout():
     resultat['prediction'] = resultat['prediction_x']+resultat['prediction_y']
     del resultat['prediction_x']
     del resultat['prediction_y']
+<<<<<<< HEAD
     pd.DataFrame(res).to_csv("reslist.csv", sep=";", decimal=",")
     resultat.to_csv("vraipred.txt", sep="\t", index =False)    
+=======
+    resultat['prediction']=resultat['prediction'].astype(int)
+    resultat.to_csv("pouranalyse.txt", sep=";", index =False)  
+    
+>>>>>>> origin/master
     return resultat
     
     
