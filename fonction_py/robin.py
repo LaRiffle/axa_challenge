@@ -88,6 +88,27 @@ def robin(x, y):
     return res
    
     
+def robinTel(x,):
+    res = []
+    for i in range(10):
+        xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8)  # rajoute les features
+        #del x
+        #del y    
+        model =RandomForestRegressor(n_estimators=40, bootstrap=False, max_depth=1, max_features=12)
+        model.fit(xTrain, yTrain)
+        #model.score(xTrain, yTrain)
+        pred = model.predict(xTest)
+        pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
+        pred[pred<0]=0
+        pred =np.round(pred)
+        res.append(LinExp(pred, yTest))
+        LinExp(pred, yTest)
+    mean(res)
+    bins = range(-300, 300, 600)
+    plt.hist(pred-yTest)
+    plt.hist(res)
+    print("--- %s seconds ---" % str((time.time() - start_time)))   
+    return res
     
 #    print("PCA")
 #    pos = [1,3,5,10,20,30,40,50, 60,62, 65, 70, 75,78, 80, 90]

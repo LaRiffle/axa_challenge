@@ -34,7 +34,7 @@ def preprocess(x, selectAss):
     x=pd.get_dummies(x)
     return(x.fillna(0), y)
     
-def preprocessFINAL(x, selectAss):
+def preprocessFINAL(x, selectAss): ###########################################################
     xTest=pd.read_csv("data/submission.txt", sep="\t") # LECTURE
     del xTest['prediction']
     souvenir = xTest.copy()
@@ -44,31 +44,49 @@ def preprocessFINAL(x, selectAss):
     xTest['HOUR'] = xTest['DATE'].str[-12:-8]
     xTest['DATE'] = xTest['DAY']+'/'+xTest['MONTH']+'/'+xTest['YEAR']
     
-    file = ['joursFeries', 'vacances']
-    for f in file:
-        jf =pd.read_csv("data/"+f+".csv", sep=";")
-        for n in list(jf):
-            xTest[n]= xTest['DATE'].isin(jf[n])
-            
     if(selectAss != False):
         xTest = xTest[xTest['ASS_ASSIGNMENT'] == selectAss]
         souvenir = souvenir[souvenir['ASS_ASSIGNMENT'] == selectAss]
 
-    xTest['tmp']=pd.to_datetime(xTest['DATE']).dt.dayofweek
+    xTest['tmp']=pd.to_datetime(xTest['DATE']).dt.dayofweek # recupere le numero du jour de la semaine
     jour = pd.DataFrame(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'])
     jour.columns = ['DAY_WE_DS']
     jour['tmp']=[0,1,2,3,4,5,6]
-    xTest=pd.merge(xTest, jour)
-    xTest['WEEK_END'] = xTest['DAY_WE_DS'].isin(['Samedi', 'Dimanche'])
+    xTest=pd.merge(xTest, jour) # attribue le nom du jour a chaque ligne
+    xTest['WEEK_END'] = xTest['DAY_WE_DS'].isin(['Samedi', 'Dimanche']) # rajoute si c'est un week end
     del xTest['DATE']
     del xTest['tmp']
-    xTest=pd.get_dummies(xTest)
+    xTest=pd.get_dummies(xTest) # cree des colonnes pour chaque feature categoriel
     s=set(list(x))
     ss=set(list(xTest))        
-    for tmp in s.difference(ss):
-        xTest[tmp]=0
-    return(xTest.fillna(0), souvenir)
+    for tmp in s.difference(ss): # supprime les features qui ne sont que dans x
+        del x[tmp]
+    for tmp in ss.difference(s): # supprime les features qui ne sont que dans xTest
+        del xTest[tmp]
+    xTest = xTest[list(x)] # reordonne les features pour qu'ils sont dans le meme ordre pour x et xTest
+    return(xTest.fillna(0), x, souvenir)
     
-    
-def print_sub(xTest, yTest):
-    xTest
+def preprocessTel(x):
+        # Ajoute les champs utiles et supprime ceux qui servent à rien
+    #del x['DAY_WE_DS']
+    #del x['TPER_TEAM']
+    x['YEAR'] = x['DATE'].str[0:4]
+    x['MONTH'] = x['DATE'].str[5:7]
+    x['DAY'] = x['DATE'].str[8:10]
+    #x['HOUR'] = x['DATE'].str[-12:-10].astype(int)
+   # x['HOUR'] = x['HOUR']+ ':'+((x['DATE'].str[-9:-8].astype(int)==3)*0.5).astype(str)
+    x['HOUR'] = x['DATE'].str[-12:-8]
+    x['DATE'] = x['DAY']+'/'+x['MONTH']+'/'+x['YEAR']
+    x['VARBIN'] = x['DATE']>='05/06/2013'
+    file = ['joursFeries', 'vacances']
+    for f in file:
+        jf =pd.read_csv("data/"+f+".csv", sep=";")
+        for n in list(jf):
+            x[n]= x['DATE'].isin(jf[n])
+    if(selectAss != False):
+        x = x[x['ASS_ASSIGNMENT'] == selectAss]
+    y = x['CSPL_RECEIVED_CALLS']
+    del x['CSPL_RECEIVED_CALLS']
+    del x['DATE']
+    x=pd.get_dummies(x)
+    return(x.fillna(0), y)

@@ -26,7 +26,7 @@ def faireSplitting(x, y, taille): # return xTrain, xTest, yTrain, yTest
 
 
 def check(yEmpirique, yTest): # A UTILISER AVEC LES DATA FRAME DE PANDAS
-    alpha=-0.1
+    alpha=0.1
 
     if(yTest.shape[0] != yEmpirique.shape[0]):
         print("Erreur sur la taille de la prédiction")
@@ -44,15 +44,16 @@ def check(yEmpirique, yTest): # A UTILISER AVEC LES DATA FRAME DE PANDAS
     print(linex/yTest.shape[0])
 
 def LinExp(yEmpirique, yTest):#Retourne l'erreur moyenne #UTILISER AVEC DES VECTEURS : POUR CONVERTIR DATA FRAME TO VECTOR DataFrame.values
-    alpha = -0.1
+    alpha = 0.1
+    coeff=linspace(1,3,len(yEmpirique))
     linex = 0
     diff = (yTest - yEmpirique).values
     for i in range(len(diff)):
-        linex = linex + math.exp(alpha * diff[i]) - alpha * diff[i] - 1
+        linex = linex + coeff[i]*( math.exp(alpha * diff[i]) - alpha * diff[i] - 1)
     return linex/yTest.shape[0]
 
 def MatLinExp(yEmpirique, yTest): #retourne la matrice d'erreur#UTILISER AVEC DES VECTEURS : POUR CONVERTIR DATA FRAME TO VECTOR DataFrame.values
-    alpha = -0.1
+    alpha = 0.1
     linex = []
     diff = (yTest - yEmpirique)
     for i in range(len(diff)):
