@@ -1,0 +1,59 @@
+from fonction_py.tools import *
+from sklearn import linear_model
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import cross_validation
+from sklearn.linear_model import LogisticRegression
+from sklearn import tree
+from sklearn import svm
+from sklearn import decomposition
+from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.grid_search import GridSearchCV
+from sklearn.grid_search import RandomizedSearchCV
+from scipy.stats import uniform as sp_randint
+from sklearn import datasets
+from sklearn.linear_model import Ridge
+from datetime import date, timedelta
+
+
+
+def testRegAnt():
+    fields = ['DATE', 'ASS_ASSIGNMENT','WEEK_END','DAY_WE_DS', 'DAY_OFF', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
+    c = pd.DataFrame()
+    data=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE du fichier de train,
+    resultat = pd.read_csv("data/submission.txt", sep="\t") # LECTURE dufichier de test
+    res=[] 
+#    data=data[data['DATE'].str.contains('2013') | data['DATE'].str.contains('2012')]
+    t = data[data['ASS_ASSIGNMENT']=='CAT']
+    t['HOUR'] = t['DATE'].str[-12:-8]
+    t['YEAR'] = t['DATE'].str[0:4]
+    t['MONTH'] = t['DATE'].str[5:7]
+    t['DAY'] = t['DATE'].str[8:10]
+    t['DATE'] = t['DAY']+'/'+t['MONTH']+'/'+t['YEAR']
+    t['DATE'] = pd.to_datetime(t['DATE'])
+    final = pd.DataFrame({'r':t['CSPL_RECEIVED_CALLS'].values}, index=t['DATE'])
+    init=pd.DataFrame({'CSPL_RECEIVED_CALLS':t['CSPL_RECEIVED_CALLS'].values}, index=t['DATE'])
+    for i in [7, 14, 21, 364]:
+        res=pd.DataFrame({'r':t['CSPL_RECEIVED_CALLS'].values}, index=t['DATE']+timedelta(days=i))
+        res = pd.merge([init,res],axis=1, join_axes=[init.index])
+        final = pd.concat([final, res['r']], axis=1, join_axes=[final.index])
+    
+    del final['r']
+
+    
+    t.merge(res, left_on='DATE', right_on='D2')   
+    t['14']= t['CSPL_RECEIVED_CALLS'].shift(14).fillna(0)
+    t['21']= t['CSPL_RECEIVED_CALLS'].shift(21).fillna(0)
+    t['364']= t['CSPL_RECEIVED_CALLS'].shift(364).fillna(0)
+    tmp = pd.get_dummies(t['DAY_WE_DS'])
+    x=pd.concat([t['7'], t['14'], t['21'], t['WEEK_END'], t['DAY_OFF'], tmp], axis=1)
+    y=t['CSPL_RECEIVED_CALLS']
+    model = linear_model.LinearRegression()
+    model.fit(x, y)
+    model.score(x, y)
+    pred = model.predict(x)
+    pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
+    pred[pred<0]=0

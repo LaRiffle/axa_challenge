@@ -58,7 +58,7 @@ def faireTout(): #fait la prediction avec le vrai resultat a uploader
     del resultat['prediction_x']
     del resultat['prediction_y']
     resultat['prediction']=resultat['prediction'].astype(int)
-    resultat.to_csv("pouranalyse.txt", sep=";", index =False)  
+    resultat.to_csv("pouranalyse.txt", sep="\t", index =False, encoding='utf-8')  
     
     return resultat
     
