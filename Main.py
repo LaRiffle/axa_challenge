@@ -29,15 +29,12 @@ import time
 start_time = time.time()
 print("go")
 
-
 fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
 selectAss = 'Téléphonie' # quel type de ASS_ASSIGNMENT on travaille
 c = pd.DataFrame()
 listass= ['CAT', 'CMS', 'Crises', 'Domicile', 'Gestion', 'Gestion - Accueil Telephonique','Gestion Assurances', 'Gestion Clients', 'Gestion DZ', 'Gestion Relation Clienteles', 'Gestion Renault', 'Japon', 'Manager', 'Mécanicien', 'Médical', 'Nuit', 'Prestataires', 'RENAULT', 'RTC', 'Regulation Medicale', 'SAP', 'Services', 'Tech. Axa', 'Tech. Inter', 'Tech. Total', 'Téléphonie']
 #'Evenements',  'Gestion Amex'
 #setFields = set(pd.read_csv("data/fields.txt", sep=";")['0'].values)
-resultat = pd.read_csv("data/submission.txt", sep="\t")
-resultat['fait'] = False
 i=0
 res = []
 start_time = time.time()
@@ -46,15 +43,9 @@ for selectAss in listass:
     print(selectAss+' ' +str(np.round(i*100/len(listass))))
     
     x=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
-<<<<<<< HEAD
-    #x,y = preprocess(x,selectAss) # rajoute les features
-    x,y = preprocessTel(x)
-    res.append(robinTel(x,y))
-=======
     x,y = preprocess(x,selectAss) # rajoute les features
     #res.append(robin(x,y))
-    res.append(tim(x,y))
->>>>>>> origin/master
+    res.append(linearLinexpMinimization(x,y))
     
     
 print("--- %s seconds ---" % str((time.time() - start_time)))

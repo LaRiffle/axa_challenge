@@ -1,4 +1,5 @@
 from fonction_py.tools import *
+from fonction_py.preprocess import *
 from sklearn import linear_model
 import pandas as pd
 import numpy as np
@@ -20,9 +21,10 @@ from fonction_py.tim import *
 
 import time
 
-def faireTout(): #fait la prediction avec le vrai resultat a uploader
+def faireTout():
     fields = ['DATE', 'DAY_OFF', 'WEEK_END', 'DAY_WE_DS', 'ASS_ASSIGNMENT', 'CSPL_RECEIVED_CALLS' ] # selectionne les colonnes à lire
     c = pd.DataFrame()
+<<<<<<< HEAD
     listmodel = faireListModel()#recupere le nom et les modeles de chaque truc
 
     data=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE du fichier de train,
@@ -45,14 +47,64 @@ def faireTout(): #fait la prediction avec le vrai resultat a uploader
         del resultat['prediction_x']
         del resultat['prediction_y']
    
+=======
+    listmodel = faireListModel()
+    #'Evenements',  'Gestion Amex'
+    #setFields = set(pd.read_csv("data/fields.txt", sep=";")['0'].values)
+#    resultat = pd.read_csv("data/submission.txt", sep="\t")
+    
+    i=0
+#    res = []
+    start_time = time.time()
+    model = listmodel[24]
+    data=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE
+    
+    resultat = pd.read_csv("data/submission.txt", sep="\t") # LECTURE
+    res=[]
+    for model in listmodel:
+        i = i+1
+        print(model[0])
+        x,y = preprocess(data.copy(), model[0]) # rajoute les features
+        model[1].fit(x, y)
+        #model.score(xTrain, yTrain)
+        (xTest, souvenir)=preprocessFINAL(x,model[0])
+        pred = model[1].predict(xTest)
+        pred[pred>max(y)*1.05]=max(y)*1.05
+        pred[pred<0]=0
+        pred =np.round(pred)
+        souvenir['prediction']=int(pred)
+        resultat=pd.merge(resultat, souvenir, how='left',on=['DATE', 'ASS_ASSIGNMENT'])
+        resultat=resultat.fillna(0)
+        resultat['prediction'] = resultat['prediction_x']+resultat['prediction_y']
+        del resultat['prediction_x']
+        del resultat['prediction_y']
+    x,y = preprocess(data.copy(), 'Téléphonie') # rajoute les features
+    #model.score(xTrain, yTrain)
+    (xTest, souvenir)=preprocessFINAL(x,'Téléphonie')
+    pred=telephoniePred(x,y,xTest)
+    pred[pred>max(y)*1.05]=max(y)*1.05
+    pred[pred<0]=0
+    pred =np.round(pred)
+    souvenir['prediction']=int(pred)
+    resultat=pd.merge(resultat, souvenir, how='left',on=['DATE', 'ASS_ASSIGNMENT'])
+    resultat=resultat.fillna(0)
+    resultat['prediction'] = resultat['prediction_x']+resultat['prediction_y']
+    del resultat['prediction_x']
+    del resultat['prediction_y']
+<<<<<<< HEAD
+    pd.DataFrame(res).to_csv("reslist.csv", sep=";", decimal=",")
+    resultat.to_csv("vraipred.txt", sep="\t", index =False)    
+=======
+>>>>>>> origin/master
     resultat['prediction']=resultat['prediction'].astype(int)
     resultat.to_csv("pouranalyse.txt", sep="\t", index =False, encoding='utf-8')  
     
+>>>>>>> origin/master
     return resultat
     
     
-def faireListModel(): # fait la liste des modeles
-    return [('CAT',  linear_model.LinearRegression(n_jobs=-1)), 
+def faireListModel():
+    return [('CAT',  linear_model.LinearRegression()), 
     ('CMS', RandomForestRegressor(bootstrap=False, criterion='mse', max_depth=5,
            max_features=30, max_leaf_nodes=None, min_samples_leaf=1,
            min_samples_split=2, min_weight_fraction_leaf=0.0,
