@@ -19,12 +19,28 @@ from sklearn.linear_model import Ridge
 
 
 def faire(xTrain,yTrain,xTest):
-    model = linear_model.LinearRegression()
-    model.fit(xTrain, yTrain)
-    model.score(xTrain, yTrain)
-    pred = model.predict(xTest)
-    pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
-    pred[pred<0]=0
+    le=[]
+    sc = []
+    data=pd.read_csv("data/trainPure.csv", sep=";", usecols=fields) # LECTURE du fichier de train,
+    x,y=preprocess(data, "CAT")
+    for i in range(100):
+        xTrain, xTest, yTrain, yTest = faireSplitting(x, y, 0.8)
+        model = RandomForestRegressor(bootstrap=False, criterion='mse', max_depth=5,
+           max_features=30, max_leaf_nodes=None, min_samples_leaf=1,
+           min_samples_split=2, min_weight_fraction_leaf=0.0,
+           n_estimators=10, n_jobs=1, oob_score=False, random_state=None,
+           verbose=0, warm_start=False)
+        model.fit(xTrain, yTrain)
+        sc.append(model.score(xTrain, yTrain))
+        pred = model.predict(xTest)
+        pred[pred>max(yTrain)*1.05]=max(yTrain)*1.05
+        pred[pred<0]=0
+        pred=np.round(pred).astype(int)
+        le.append(LinExp(pred, yTest))
+    mean(sc)
+    mean(le)
+    plt.hist(le)
+    plt.hist(sc)
     return np.round(pred).astype(int)
 
     
